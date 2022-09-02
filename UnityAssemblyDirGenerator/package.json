@@ -1,0 +1,11 @@
+{
+  "name": "com.riskytools.unityassemblygenerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mkass.js",
+  "author": "",
+  "dependencies": {
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.3"
+  }
+}

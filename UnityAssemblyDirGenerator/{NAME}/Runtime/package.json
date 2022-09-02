@@ -1,0 +1,24 @@
+INTENTIONALLY INVALID JSON
+So you have to fix this before publishing ;)
+{
+    "name": "{PREFIX}.{NAME}",
+    "version": "1.0.0",
+    "displayName": "TODO",
+    "description": "TODO",
+    "unity": "TODO",
+    "unityRelease": "TODO",
+    "keywords": [],
+    "author": {
+        "name": "{GIT_USER}",
+        "email": "{GIT_EMAIL}",
+        "url": "TODO"
+    },
+    "type": "library",
+    "publishConfig": {
+        "registry": "{NPM_REGISTRY}"
+    },
+    "repository": {
+        "type": "git",
+        "url": "{GIT_REPO}"
+    }
+}
