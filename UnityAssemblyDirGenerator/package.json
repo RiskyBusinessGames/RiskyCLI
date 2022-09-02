@@ -6,6 +6,9 @@
   "author": "",
   "dependencies": {
     "fs-extra": "^10.1.0",
-    "glob": "^8.0.3"
+    "glob": "^8.0.3",
+    "renamer": "^4.0.0",
+    "replace-in-files": "^3.0.0",
+    "shelljs": "^0.8.5"
   }
 }

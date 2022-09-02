@@ -1,17 +1,12 @@
-﻿using RiskyTools.Data.Services;
-using Zenject;
+﻿using Zenject;
 
-namespace RiskyToolsPackage.Runtime.Data.Installers
+namespace {PREFIX}.{NAME}.Installers
 {
-    public class DataObjectsInstaller: Installer<DataObjectsInstaller>
+    public class {NAME}Installer: Installer<{NAME}Installer>
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<DataMessagingService>()
-                .FromNew()
-                .AsSingle()
-                .NonLazy();
-
+            // TODO: Install stuff here!
         }
     }
 }
