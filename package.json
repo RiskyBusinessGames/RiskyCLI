@@ -1,5 +1,5 @@
 {
-  "name": "com.riskytools.unityassemblygenerator",
+  "name": "com.riskybusiness.riskygenerators",
   "version": "1.0.0",
   "description": "",
   "main": "mkass.js",
@@ -10,5 +10,9 @@
     "renamer": "^4.0.0",
     "replace-in-files": "^3.0.0",
     "shelljs": "^0.8.5"
+  },
+  "bin":{
+    "mkass": "./AssemblyDirGenerator/mkass.js",
+    "mkmeta": "./MetaFileGenerator/mkmeta.js"
   }
 }

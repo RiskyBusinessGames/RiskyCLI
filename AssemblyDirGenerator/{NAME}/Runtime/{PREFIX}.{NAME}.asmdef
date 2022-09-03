@@ -1,6 +1,6 @@
 {
     "name": "{PREFIX}.{NAME}",
-    "rootNamespace": "",
+    "rootNamespace": "{PREFIX}.{NAME}",
     "references": [
         "Zenject"
     ],

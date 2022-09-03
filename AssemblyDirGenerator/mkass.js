@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fse = require('fs-extra');
 var glob = require('glob');
 var path = require('path');
@@ -11,6 +13,8 @@ const REGEXS =
     ];
 
 const VALUES = process.argv.slice(2);
+
+console.log(VALUES);
 
 const GIT_USER = "{GIT_USER}";
 const GIT_EMAIL = "{GIT_EMAIL}";
@@ -64,6 +68,14 @@ async function CreateDir() {
     {
         console.log(`renaming files "${REGEXS[i]} with ${VALUES[i]}"`);
 
-        shell.exec(`${__dirname}/node_modules/.bin/renamer --find \"${REGEXS[i]}\" --replace \"${VALUES[i]}\" \"${workingDir}/**\"`, { silent: false });
+        shell.exec(`${__dirname}/../node_modules/.bin/renamer --find \"${REGEXS[i]}\" --replace \"${VALUES[i]}\" \"${workingDir}/**\"`, { silent: false });
     }
+
+    glob(`${workingDir}**/*`, options, function (er, files) {
+        
+        files.forEach(path => {
+            shell.exec(`mkmeta ${path}`);
+        });
+        
+    });
 }
