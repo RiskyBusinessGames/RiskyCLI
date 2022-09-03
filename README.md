@@ -1,5 +1,5 @@
 # Risky Generators
-CLI for generating risky buisiness faster.
+CLI for generating risky business faster.
 
 ## Instalation
 (not published yet)
@@ -10,10 +10,11 @@ CLI for generating risky buisiness faster.
 
 ## Commands
 
-### `mkass`
+### `mkass` Command
 Creates a standard assembly structure, with runtime, editor and test assemblies
 
-Takes two parameters, a prefix/project name to use, and a assembly name.
+* Takes two parameters, a prefix/project name to use, and a assembly name.
+* creates the new dir structure in the _current directory_!
 
 See [Template](AssemblyDirGenerator\{NAME}) dir structure for details. 
 
@@ -71,7 +72,7 @@ mkass MyAwesomeProject PotatoSystem
             └───TestFixtures
 ```
 
-### `mkmeta`
+### `mkmeta` Command
 
 Generates meta files for Directories, code/text files and .asmdef files. This generates a new GUID, and throws an exception of the metafile already exists.
 

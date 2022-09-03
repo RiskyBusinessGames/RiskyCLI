@@ -13,6 +13,7 @@
   },
   "bin":{
     "mkass": "./AssemblyDirGenerator/mkass.js",
-    "mkmeta": "./MetaFileGenerator/mkmeta.js"
+    "mkmeta": "./MetaFileGenerator/mkmeta.js",
+    "mkservice": "./ServiceGenerator/mkservice.js"
   }
 }
