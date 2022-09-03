@@ -27,11 +27,13 @@ async function main()
         data.paths.namespace
     ];
 
+    console.log(data);
+
     await CreateRuntimeTempDir(data);
     await CreatePlayModeTempDir(data);
     await CreateEditModeTempDir(data);
 
-    shell.exec(`tree -a "${data.tempDirs}/../"`);
+    shell.exec(`tree -a "${__dirname}/../temp"`);
 }
 
 
@@ -100,7 +102,7 @@ function CreateTempWorkingDirs()
     {
         runtime: utilities.join(tempDir, "Runtime"),
         editMode: utilities.join(tempDir, "Tests", "EditMode"),
-        playMode: utilities.join(tempDir, "Tests", "EditMode")
+        playMode: utilities.join(tempDir, "Tests", "PlayMode")
     }
 
     console.log(tempDirs);
@@ -118,9 +120,6 @@ async function CreateRuntimeTempDir(data)
     await utilities.templateFiles(data.tempDirs.runtime, data.regexs, data.values);
     await utilities.renameFiles(data.tempDirs.runtime, data.regexs, data.values);
     await utilities.addInstallerEntry(installerTempPath, "NOT IMPLEMENTED");
-    
-
-    shell.exec(`tree -a "${data.tempDirs.runtime}/../"`);
 }
 
 async function CreatePlayModeTempDir(data)

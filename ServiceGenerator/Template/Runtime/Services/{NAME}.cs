@@ -1,3 +1,4 @@
+using Zenject;
 using {NAMESPACE}.Interfaces;
 
 namespace {NAMESPACE}.Services
@@ -8,6 +9,14 @@ namespace {NAMESPACE}.Services
     /// </summary>
     public class {NAME}: I{NAME}
     {
+        internal static void InstallService(DiContainer container)
+        {
+            container.BindInterfacesTo<{NAME}>()
+                .FromNew()
+                .AsSingle()
+                .NonLazy();
+        }
+
         internal {NAME}()
         {
             
