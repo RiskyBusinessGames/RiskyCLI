@@ -29,9 +29,13 @@ module.exports=
 
         filePath = path.relative("./", filePath).replace(/\\/g,"/");
 
-        Object.keys(regexs).forEach(async key => {
+        var keys = Object.keys(regexs);
+
+        for(var i = 0; i < keys.length; i++)
+        {
+            var key = keys[i];
             await fileUtils.replaceInFileContent(filePath, regexs[key], values[key]);
-        });  
+        }
     },
 
     renameFiles: async function(filePath, regexs, values)

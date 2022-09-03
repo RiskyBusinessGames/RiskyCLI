@@ -2,12 +2,12 @@
 
 const utilities=require("../utilities");
 const installerUtils=require("../installerUtils");
+const mkmeta = require("../MetaFileGenerator/mkmeta");
 
 const path=require("path");
 
 const fse = require('fs-extra');
 const glob = require('glob');
-const shell = require("shelljs");
 
 
 main();
@@ -32,12 +32,32 @@ async function main()
         namespace: data.paths.namespace
     };
 
+    console.log(data);
+
+    console.log('\x1b[33m%s\x1b[0m',"Templating Runtime files...")
     await CreateRuntimeTempDir(data);
+
+    console.log('\x1b[33m%s\x1b[0m',"Templating Installer...")
     await UpdateTempInstaller(data);
+
+    console.log('\x1b[33m%s\x1b[0m',"Templating PlayMode Test files...")
     await CreatePlayModeTempDir(data);
+
+    console.log('\x1b[33m%s\x1b[0m',"Templating PlayMode Test Files...")
     await CreateEditModeTempDir(data);
 
-    //shell.exec(`tree -a "${__dirname}/../temp"`);
+    console.log('\x1b[33m%s\x1b[0m',"Generating Meta Files...")
+    mkmeta.CreateMetaFilesRecursive(data.tempDirs.runtime);
+    mkmeta.CreateMetaFilesRecursive(data.tempDirs.playMode);
+    mkmeta.CreateMetaFilesRecursive(data.tempDirs.editMode);
+
+
+    console.log('\x1b[33m%s\x1b[0m',"Copying to target dir..")
+    fse.copySync(data.tempDirs.runtime, data.paths.runtimeDir);
+    fse.copySync(data.tempDirs.playMode, data.paths.playTestDirectory);
+    fse.copySync(data.tempDirs.editMode, data.paths.editTestDirectory);
+    
+    console.log('\x1b[33m%s\x1b[0m',"DONE!")
 }
 
 
@@ -45,7 +65,7 @@ function SetupArgs()
 {
     const VALUES = process.argv.slice(2);
 
-    if (VALUES.length != 1) {
+    if (VALUES.length == 0) {
         throw new Error("requires args; 'name'");
     } 
 
@@ -54,8 +74,6 @@ function SetupArgs()
 
 function SetupTemplates()
 {
-    console.log(utilities);
-
     const tempaltes = 
     {
         runtime: utilities.join(__dirname, "Template", "Runtime"),
@@ -68,15 +86,31 @@ function SetupTemplates()
 
 function SetupPaths()
 {
-    const workingDir = "./";
+    var workingDir = "./";
         
-    if(path.basename(path.resolve(workingDir)) != "Runtime")
+    if(path.basename(workingDir) != "Runtime")
     {
-        console.warn(path.dirname(workingDir));
-        throw new Error("must be run in an Runtime assembly directory");
+        var assemblyName = process.argv.slice(2)[1];
+        if(assemblyName == undefined)
+        {
+            console.warn(path.dirname(workingDir));
+            throw new Error("must be run in an Runtime assembly directory");
+        }
+
+        var globPath = utilities.join(workingDir, "**", assemblyName, "Runtime");
+        var assemblyPath = glob.sync(globPath)[0];
+
+        if(assemblyPath == undefined)
+        {
+            throw new Error(`Unable to find Assembly path for ${assemblyName}`);
+        }
+
+        workingDir = assemblyPath;
     }
 
-    var assemblyFile = glob.sync(`${workingDir}*.asmdef`)[0];
+    var assemblyFile = glob.sync(utilities.join(workingDir, "*.asmdef"))[0];
+
+    assemblyFile = path.basename(assemblyFile);
 
     if(assemblyFile == undefined)
     {
@@ -85,14 +119,14 @@ function SetupPaths()
 
     const paths=
     {
-        workingDir: workingDir,
+        runtimeDir: workingDir,
         assemblyFile: assemblyFile,
         namespace: assemblyFile.replace(".asmdef", "").replace("./", ""),
         editTestDirectory: utilities.join(workingDir, "../Tests/EditMode"),
         playTestDirectory: utilities.join(workingDir, "../Tests/PlayMode"),
         playModeTestFixturesDirectory: utilities.join(workingDir, "../Tests/PlayMode/TestFixtures"),
-        servicesDirectory: utilities.join(workingDir, "Services"),
-        installerPath: utilities.join(workingDir, `Installers/${assemblyFile.split(".")[2]}Installer.cs`)
+        servicesDirectory: `${workingDir}/Services`,
+        installerPath: `Installers/${assemblyFile.split(".")[1]}Installer.cs`
     }
 
     return paths;
@@ -104,6 +138,7 @@ function CreateTempWorkingDirs()
 
     const tempDirs=
     {
+        root: tempDir,
         runtime: utilities.join(tempDir, "Runtime"),
         editMode: utilities.join(tempDir, "Tests", "EditMode"),
         playMode: utilities.join(tempDir, "Tests", "PlayMode")
@@ -124,10 +159,15 @@ async function CreateRuntimeTempDir(data)
 
 async function UpdateTempInstaller(data)
 {
-    var installerTempPath = utilities.join(data.tempDirs.runtime, data.paths.installerPath);
-    fse.copySync(data.paths.installerPath, installerTempPath, {overwrite:true});
+    var tempPath=utilities.join(data.tempDirs.runtime, data.paths.installerPath);
+    var realPath=utilities.join(data.paths.runtimeDir, data.paths.installerPath);
+    
+    console.log('\x1b[33mTEMP PATH: %s\x1b[0m', tempPath)
+    console.log('\x1b[33mREAL PATH: %s\x1b[0m', realPath)
 
-    await installerUtils.addServiceToInstaller(installerTempPath, data.values.name);
+    fse.copySync(realPath, tempPath, {overwrite:true});
+
+    await installerUtils.addServiceToInstaller(tempPath, data.values.name);
 }
 
 async function CreatePlayModeTempDir(data)
@@ -145,36 +185,3 @@ async function CreateEditModeTempDir(data)
     await utilities.templateFiles(data.tempDirs.editMode, data.regexs, data.values);
     await utilities.renameFiles(data.tempDirs.editMode, data.regexs, data.values);
 }
-
-function CreateOutputDirs()
-{
-
-}
-
-/*
-{
-  templates: {
-    runtimeServicesDir: 'E:\\git_repos\\RiskyBusiness\\RiskyFiles\\ServiceGenerator/Template/Services',
-    runtimeInterfacesDir: 'E:\\git_repos\\RiskyBusiness\\RiskyFiles\\ServiceGenerator/Template/Interfaces',
-    playModeDir: 'E:\\git_repos\\RiskyBusiness\\RiskyFiles\\ServiceGenerator/Template/PlayMode',
-    editModeDir: 'E:\\git_repos\\RiskyBusiness\\RiskyFiles\\ServiceGenerator/Template/EditMode'
-  },
-  tempDirs: {
-    runtime: 'C:\\Users\\Matt\\AppData\\Local\\Temp\\Runtime',
-    editMode: 'C:\\Users\\Matt\\AppData\\Local\\Temp\\Tests\\EditMode',
-    playMode: 'C:\\Users\\Matt\\AppData\\Local\\Temp\\Tests\\EditMode'
-  },
-  paths: {
-    workingDir: './',
-    templateDir: 'E:\\git_repos\\RiskyBusiness\\RiskyFiles\\ServiceGenerator/Template',
-    assemblyFile: './MyAwesomeProject.PotatoSystem.asmdef',
-    namespace: 'MyAwesomeProject.PotatoSystem',
-    editTestDirectory: '..\\Tests\\EditMode',
-    playTestDirectory: '..\\Tests\\PlayMode',
-    playModeTestFixturesDirectory: '..\\Tests\\PlayMode\\TestFixtures',
-    servicesDirectory: 'Services',
-    installerPath: 'Installers\\PotatoSystemInstaller.cs'
-  }
-}
-
-*/

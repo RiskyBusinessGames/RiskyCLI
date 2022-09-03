@@ -12,7 +12,7 @@
     "shelljs": "^0.8.5"
   },
   "bin":{
-    "mkass": "./AssemblyDirGenerator/mkass.js",
+    "mkass": "./AssemblyGenerator/mkass.js",
     "mkmeta": "./MetaFileGenerator/mkmeta.js",
     "mkservice": "./ServiceGenerator/mkservice.js"
   }

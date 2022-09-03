@@ -1,81 +1,63 @@
 #!/usr/bin/env node
 
+const utilities=require("../utilities");
 const fse = require('fs-extra');
-var glob = require('glob');
-var path = require('path');
 const shell = require("shelljs");
-const replaceInFiles = require('replace-in-files');
+const mkmeta = require("../MetaFileGenerator/mkmeta");
 
-const REGEXS =
-    [
-        /{PREFIX}/g,
-        /{NAME}/g
-    ];
+main();
 
-const VALUES = process.argv.slice(2);
+async function main()
+{
+    const data=
+    {
+        args:SetupArgs(),
+        templateDir:`${__dirname}/{NAME}`,
+        tempDir: utilities.createTempDir(),
+        regexs:{
+            prefix: /{PREFIX}/g,
+            name: /{NAME}/g
+        }
+    };
+    
+    data.values=
+    {
+        prefix: data.args[0],
+        name:data.args[1],
+    };
 
-console.log(VALUES);
-
-const GIT_USER = "{GIT_USER}";
-const GIT_EMAIL = "{GIT_EMAIL}";
-const NPM_REGISTRY = "{NPM_REGISTRY}";
-const GIT_REPO = "{GIT_REPO}";
-
-var templateDir = `${__dirname}/{NAME}`;
-const workingDir = "./";
-
-console.log(templateDir);
-console.log(workingDir);
-
-if (VALUES.length != 2) {
-    throw new Error("requires 2 args; 'prefix' and 'name'");
+    await CreateDir(data);
 }
 
 
-CreateDir();
+function SetupArgs()
+{
+    const VALUES = process.argv.slice(2);
+
+    if (VALUES.length != 2) {
+        throw new Error("requires args; 'name'");
+    } 
+
+    return VALUES;
+}
 
 
-async function CreateDir() {
+async function CreateDir(data) {
 
-    fse.copySync(`${__dirname}/{NAME}`, `${workingDir}/{NAME}`);
+    console.log('\x1b[33m%s\x1b[0m',"Copying templates...")
+    fse.copySync(`${data.templateDir}`, `${data.tempDir}/{NAME}`);
 
-    for (var i = 0; i < REGEXS.length; i++) {
-        try {
+    console.log('\x1b[33m%s\x1b[0m',"Templating Files...")
+    await utilities.templateFiles(data.tempDir, data.regexs, data.values);
+    
+    console.log('\x1b[33m%s\x1b[0m',"Renaming Files...")
+    await utilities.renameFiles(data.tempDir, data.regexs, data.values);
 
-            console.log(`replacing "${REGEXS[i]} with ${VALUES[i]}"`)
+    console.log('\x1b[33m%s\x1b[0m',"Generating Meta Files...")
+    mkmeta.CreateMetaFilesRecursive(`${data.tempDir}/${data.values.name}`);
+    
+    console.log('\x1b[33m%s\x1b[0m',"Copying to target dir..")
+    fse.copySync(data.tempDir, "./");
 
-            var options = {
-                files: `${workingDir}/**/*`,
-
-                from: REGEXS[i],  // string or regex
-                to: VALUES[i] // string or fn  (fn: carrying last argument - path to replaced file)
-            };
-
-            var {
-                changedFiles,
-                countOfMatchesByPaths,
-                replaceInFilesOptions
-            } = await replaceInFiles(options);
-            console.log('Modified files:', changedFiles);
-            console.log('Count of matches by paths:', countOfMatchesByPaths);
-            console.log('was called with:', replaceInFilesOptions);
-        } catch (error) {
-            console.log('Error occurred:', error);
-        }
-    }
-
-    for (var i = 0; i < REGEXS.length; i++) 
-    {
-        console.log(`renaming files "${REGEXS[i]} with ${VALUES[i]}"`);
-
-        shell.exec(`${__dirname}/../node_modules/.bin/renamer --find \"${REGEXS[i]}\" --replace \"${VALUES[i]}\" \"${workingDir}/**\"`, { silent: false });
-    }
-
-    glob(`${workingDir}**/*`, options, function (er, files) {
-        
-        files.forEach(path => {
-            shell.exec(`mkmeta ${path}`);
-        });
-        
-    });
+    console.log('\x1b[33m%s\x1b[0m',"DONE!")
 }

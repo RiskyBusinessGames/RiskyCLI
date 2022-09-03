@@ -9,19 +9,29 @@ module.exports=
         var file = fse.readFileSync(filePath, 'utf-8');
         var lines = file.split(/\r?\n/);
 
+        console.log(`READING FILE: ${filePath}`);
+        console.log(`READING FILE: ${lines.length}`);
+
         return lines;
     },
 
     writeFileLines: function (filePath, lines)
     {
+        console.log(`WRITING FILE: ${filePath}`);
+        console.log(`WRITING FILE: ${lines.length}`);
+
+        fse.rmSync(filePath);
+
         var writer = fse.createWriteStream(filePath);
 
-        lines.forEach(line => {
-            writer.write(line);
+        for(var i = 0; i < lines.length; i++)
+        {
+            console.log(lines[i]);
+            writer.write(lines[i]);
             writer.write("\n");
-        });
+        }
 
-        writer.end();
+        //writer.end();
     },
     replaceInFileNames: async function(filePath, regex, value)
     {
@@ -30,7 +40,7 @@ module.exports=
         var globPath=`${filePath}/**`;
         console.log("\tglobPath="+globPath);
 
-        await shell.exec(`${__dirname}/node_modules/.bin/renamer --find \"${regex}\" --replace \"${value}\" \"${globPath}\"`, { silent: false });
+        await shell.exec(`${__dirname}/node_modules/.bin/renamer --find \"${regex}\" --replace \"${value}\" \"${globPath}\"`, { silent: true });
     },
     replaceInFileContent: async function(filePath, regex, value)
     {

@@ -32,8 +32,6 @@ module.exports=
             {
                 const template = templates.serviceInstallerTemplate;
 
-                console.log(template);
-
                 const newInstallerLine=lines[i]
                     .replace(tags.services, template)
                     .replace(regexs.name, serviceName)
@@ -42,7 +40,7 @@ module.exports=
                 break;
             }
         }
-
+        
         await fileUtils.writeFileLines(installerPath, lines);
     }
 }
