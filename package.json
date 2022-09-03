@@ -2,7 +2,7 @@
   "name": "com.riskybusiness.riskygenerators",
   "version": "1.0.0",
   "description": "",
-  "main": "mkass.js",
+  "main": "index.js",
   "author": "",
   "dependencies": {
     "fs-extra": "^10.1.0",

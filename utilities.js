@@ -1,9 +1,7 @@
 const { join } = require('path');
 const path = require('path');
-const replaceInFiles = require('replace-in-files');
-const shell = require("shelljs");
 const fse = require('fs-extra');
-
+const fileUtils = require('./fileUtils');
 
 module.exports=
 {
@@ -28,50 +26,21 @@ module.exports=
 
     templateFiles: async function(filePath, regexs, values)
     {
-        for (var i = 0; i < regexs.length; i++) {
-            try {
-    
-                console.log(`\nutilities.templateFiles():\n\treplacing "${regexs[i]} with ${values[i]}"`);
-    
-                var options = {
-                    files: `${filePath}/**/*`,
-    
-                    from: regexs[i],  // string or regex
-                    to: values[i] // string or fn  (fn: carrying last argument - path to replaced file)
-                };
-    
-                var {countOfMatchesByPaths} = await replaceInFiles(options);
 
-                console.log(`\treplaced: ${changesSum(countOfMatchesByPaths)} instances`);
-            }
-            catch (error)
-            {
-                console.log('\tError occurred:', error);
-                throw error;
-            }
-        }
-    
+        filePath = path.relative("./", filePath).replace(/\\/g,"/");
 
+        Object.keys(regexs).forEach(async key => {
+            await fileUtils.replaceInFileContent(filePath, regexs[key], values[key]);
+        });  
     },
 
     renameFiles: async function(filePath, regexs, values)
     {
         filePath = path.relative("./", filePath).replace(/\\/g,"/");
 
-        for (var i = 0; i < regexs.length; i++) 
-        {
-            console.log(`\nutilities.templateFiles():\n\trenaming files "${regexs[i]} with ${values[i]}"\n\tpath="${filePath}"`);
-    
-            var globPath=`${filePath}/**`;
-            console.log("\tglobPath="+globPath);
-
-            await shell.exec(`${__dirname}/node_modules/.bin/renamer --find \"${regexs[i]}\" --replace \"${values[i]}\" \"${globPath}\"`, { silent: false });
-        }
-    },
-
-    addInstallerEntry: function(filePath, string)
-    {
-        console.log(`\nutilities.addInstallerEntry():\n\tNOT IMPLEMENTED\n\tpath=${filePath}\n\tstring=${string}`);
+        Object.keys(regexs).forEach(async key => {
+            await fileUtils.replaceInFileNames(filePath, regexs[key], values[key]);
+        });        
     },
 
     createTempDir: function()
@@ -93,13 +62,3 @@ module.exports=
         return tempDir;
     }
 };
-
-
-function changesSum(countOfMatchesByPaths)
-{
-    var count = 0;
-    Object.keys(countOfMatchesByPaths[0]).forEach(key => {
-        count += countOfMatchesByPaths[0][key];
-    });
-    return count;
-}

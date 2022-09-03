@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const utilities=require("../utilities");
+const installerUtils=require("../installerUtils");
+
 const path=require("path");
 
 const fse = require('fs-extra');
@@ -18,22 +20,24 @@ async function main()
         templates:SetupTemplates(),
         tempDirs:CreateTempWorkingDirs(),
         paths:SetupPaths(),
-        regexs:[ /{NAME}/g, /{NAMESPACE}/g ]
+        regexs:{
+            name: /{NAME}/g, 
+            namespace: /{NAMESPACE}/g 
+        }
     };
     
     data.values=
-    [
-        data.args[0],
-        data.paths.namespace
-    ];
-
-    console.log(data);
+    {
+        name: data.args[0],
+        namespace: data.paths.namespace
+    };
 
     await CreateRuntimeTempDir(data);
+    await UpdateTempInstaller(data);
     await CreatePlayModeTempDir(data);
     await CreateEditModeTempDir(data);
 
-    shell.exec(`tree -a "${__dirname}/../temp"`);
+    //shell.exec(`tree -a "${__dirname}/../temp"`);
 }
 
 
@@ -112,14 +116,18 @@ function CreateTempWorkingDirs()
 
 async function CreateRuntimeTempDir(data)
 {
-    var installerTempPath = utilities.join(data.tempDirs.runtime, data.paths.installerPath);
-
-    fse.copySync(data.paths.installerPath, installerTempPath, {overwrite:true});
     fse.copySync(data.templates.runtime, data.tempDirs.runtime, {overwrite:true});
 
     await utilities.templateFiles(data.tempDirs.runtime, data.regexs, data.values);
     await utilities.renameFiles(data.tempDirs.runtime, data.regexs, data.values);
-    await utilities.addInstallerEntry(installerTempPath, "NOT IMPLEMENTED");
+}
+
+async function UpdateTempInstaller(data)
+{
+    var installerTempPath = utilities.join(data.tempDirs.runtime, data.paths.installerPath);
+    fse.copySync(data.paths.installerPath, installerTempPath, {overwrite:true});
+
+    await installerUtils.addServiceToInstaller(installerTempPath, data.values.name);
 }
 
 async function CreatePlayModeTempDir(data)
