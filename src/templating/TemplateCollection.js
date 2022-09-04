@@ -4,84 +4,80 @@ import {TemplatedDirectory} from "./TemplatedDirectory.js";
 
 const __dirname = pathUtils.GetPackageRoot();
 
-export 
-{
-	TemplatePaths,
-	TemplateCollection
-}
-
-const TemplatePaths={
-	Module:`${__dirname}/templates/module/`,
-	Service:`${__dirname}/templates/service/`,
+const TemplatePaths = {
+	Module: `${__dirname}/templates/module/`,
+	Service: `${__dirname}/templates/service/`,
 	Component: `${__dirname}/templates/module/`,
 	Meta: `${__dirname}/templates/meta/`
 }
 
 class TemplateCollection
 {
-	FileTemplates=[];
-	DirectoryTemplates=[];
-	
-	constructor(templatePath, destinationPath)
-	{		
-		if(destinationPath !== undefined)
-		{
-			this.LoadTemplatesAndDestination(templatePath, destinationPath);
-		}
-		else 
-		{
-			this.LoadTemplates(templatePath);
-		}
+	FileTemplates = [];
+	DirectoryTemplates = [];
 
-		console.log("TemplateCollection::ctor");
-		console.log(this.FileTemplates);
-		console.log(this.DirectoryTemplates);
+	constructor(templatePath, destinationRoot)
+	{
+		this.LoadTemplates(templatePath, destinationRoot);
+
+		// console.log("TemplateCollection::ctor");
+		// console.log(this.FileTemplates);
+		// console.log(this.DirectoryTemplates);
 	}
+
+	LoadTemplates(templatePath, destinationRoot)
+	{
+		let globString = `${templatePath}**/*`;
+		let globResult = pathUtils.GlobSync(globString);
+		for (let i = 0; i < globResult.length; i++)
+		{
+			let relativePath = pathUtils.GetRelative(templatePath, globResult[i]);
+			let absolutePath = pathUtils.Resolve(globResult[i]);
+			let outputPath = pathUtils.Resolve(pathUtils.Join(destinationRoot, relativePath));
+
+			console.log("!!!!!!!!!!!!!!!")
+			console.log(relativePath);
+			console.log(absolutePath);
+			console.log(outputPath);
+			console.log("!!!!!!!!!!!!!!!")
+			
+			if (pathUtils.IsFile(absolutePath))
+			{
+				console.log("Path is File: "+absolutePath);
+				this.FileTemplates.push(new TemplatedFile(absolutePath, outputPath));
+			}
+
+			if (pathUtils.IsDir(absolutePath))
+			{
+				console.log("Path is Directory: "+absolutePath);
+				this.DirectoryTemplates.push(new TemplatedDirectory(absolutePath, outputPath));
+			}
+		}
+	}
+
+	GenerateOutput(unityProject, regexs, values)
+	{
+		console.log("TemplateCollection::GenerateOutput");
+		console.log(regexs);
+		console.log(values);
 		
-	LoadTemplates(templatePath)
-	{
-		let globString = `${templatePath}**/*`;
-		let globResult = pathUtils.GlobSync(globString);
-				
-		for(let i = 0; i < globResult.length; i++)
+		this.DirectoryTemplates.forEach(template =>
 		{
-			let filePath = globResult[i];
+			template.GenerateOutput(regexs, values);
+			unityProject.CreateMetaFile(template.DestinationPath);
+		});
 			
-			if(pathUtils.IsFile(filePath))
-			{
-				this.FileTemplates.push(new TemplatedFile(filePath));
-			}
-		}
-	}
-	
-	GenerateOutput(regexs, values)
-	{
-		this.FileTemplates.forEach(fileTemplate =>{
-			fileTemplate.GenerateOutput(regexs, values);
-		});
-		this.DirectoryTemplates.forEach(fileTemplate =>{
-			fileTemplate.GenerateOutput(regexs, values);
-		});
-	}
-	
-	
-	LoadTemplatesAndDestination(templatePath, destinationPath)
-	{
-		let globString = `${templatePath}**/*`;
-		let globResult = pathUtils.GlobSync(globString);
-		for(let i = 0; i < globResult.length; i++)
+		
+		this.FileTemplates.forEach(template =>
 		{
-			let filePath = globResult[i];
+			template.GenerateOutput(regexs, values);
+			unityProject.CreateMetaFile(template.DestinationPath);
+		});
+	}
+}
 
-			if(pathUtils.IsFile(filePath))
-			{
-				this.FileTemplates.push(new TemplatedFile(filePath, destinationPath));
-			}
-			
-			if(pathUtils.IsDir(filePath))
-			{
-				this.DirectoryTemplates.push(new TemplatedDirectory(filePath, destinationPath));
-			}
-		}
-	}
+export
+{
+	TemplatePaths,
+	TemplateCollection
 }

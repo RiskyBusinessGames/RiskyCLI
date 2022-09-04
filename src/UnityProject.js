@@ -25,11 +25,9 @@ class UnityProject
             throw new Error("Error while finding project root");
         }
 
-        this.ProjectName = pathUtils.Resolve(root).split("/")[-1];
+        this.Name = pathUtils.Resolve(root.filePath).split("/").slice(-1)[0];
         
-        console.log(this.ProjectName);
-        
-        return;
+        console.log(this.Name);
         
         let projectRoot = pathUtils.GetRelative(this.WorkingDir, root.filePath);
 
@@ -56,8 +54,8 @@ class UnityProject
         this.ResourcePaths = FindResourcesPaths(this.UnityPaths.Assets);
 
         this.ModuleGenerator = new ModuleGenerator(this);
-        this.ServiceGenerator = new ServiceGenerator(this);
-        this.ComponentGenerator = new ComponentGenerator(this);
+        //this.ServiceGenerator = new ServiceGenerator(this);
+        //this.ComponentGenerator = new ComponentGenerator(this);
         this.MetaFileGenerator = new MetaFileGenerator(this);
 
     }
@@ -180,9 +178,4 @@ function FindResourcesPaths(projectRoot)
 {
     return pathUtils.GlobSync(`${projectRoot}/**/Resources`);
 }
-
-let project = new UnityProject();
-project.CreateMetaFile("./Assets");
-//project.CreateMetaFile("./Assets/Source/TestUtilities/RiskyTools.Tests.TestUtilities.asmdef");
-//project.CreateMetaFile("./Assets/Source/TestUtilities/TestReflectionUtility.cs");
 

@@ -1,10 +1,8 @@
-#!/usr/bin/env node
-
 //import templateUtils from "/utilities/templateUtils"
 //import mkmeta from "/MetaFileGenerator/mkmeta"
 //import * as fse from "fs-extra"
 import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
-import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection";
+import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
 
 export
 {
@@ -18,14 +16,12 @@ class ModuleGenerator extends GeneratorBase
     {
         super(unityProject);
         console.log("ModuleGenerator::ctor");
-        
-        this.Templates = TemplateCollections.Module;
     }
 
     Generate(moduleName)
     {
-        console.log(`Creating Service: ${moduleName}`);
-        
+        console.log(`Creating Module: ${moduleName}`);
+                
         return new Module(this.UnityProject, moduleName);
     }
 }
@@ -38,11 +34,22 @@ class Module
     
     constructor(unityProject, moduleName)
     {
+        if(unityProject === undefined || moduleName === undefined)
+        {
+            throw new Error("invalid ctor input");
+        }
+        
         this.UnityProject = unityProject;
         this.Name = moduleName;
 
-
-        this.TempalateCollection = new TemplateCollection(TemplatePaths.Module);
+        console.log("Module::ctor");
+        console.log("\tModule=" + this.Name);
+        console.log("\tProject=" + this.UnityProject.Name);
+        
+        
+        this.TempalateCollection = new TemplateCollection(
+            TemplatePaths.Module,
+            unityProject.ProjectPaths.Modules);
                 
         let regexs = [
             /{PREFIX}/g,
@@ -50,11 +57,11 @@ class Module
         ];
         
         let values = [
-            this.UnityProject.name,
+            this.UnityProject.Name,
             this.Name
         ];
         
-        this.TempalateCollection.GenerateOutput(regexs, values);
+        this.TempalateCollection.GenerateOutput(unityProject, regexs, values);
         
         console.log("Module::ctor");
         console.log("\tName=" + this.Name);

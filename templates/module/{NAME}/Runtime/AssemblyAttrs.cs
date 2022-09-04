@@ -7,3 +7,13 @@ namespace {PREFIX}.{NAME}
 {
     // Intentionally blank, used for setting up namespace level attributes
 }
+
+namespace {PREFIX}.{NAME}.Services
+{
+    // Intentionally blank, used for setting up namespace level attributes
+}
+
+namespace {PREFIX}.{NAME}.Interfaces
+{
+    // Intentionally blank, used for setting up namespace level attributes
+}
