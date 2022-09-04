@@ -1,17 +1,56 @@
 #!/usr/bin/env node
 
-import templateUtils from "/utilities/templateUtils"
-import installerUtils from "/utilities/installerUtils"
-import pathUtils from "/utilities/pathUtils"
-import mkmeta from "/MetaFileGenerator/mkmeta"
+/*import templateUtils from "../utilities/templateUtils"
+import installerUtils from "../utilities/installerUtils"
+import pathUtils from "../utilities/pathUtils"
+import mkmeta from "./MetaFileGenerator"
 
 import * as path from "path"
 import * as fse from 'fs-extra'
-import * as glob from 'glob'
+import * as glob from 'glob'*/
+import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
+
+export
+{
+    ServiceGenerator,
+    Service
+}
+
+class ServiceGenerator extends GeneratorBase
+{
+    constructor(unityProject)
+    {
+        super(unityProject);
+
+        console.log("ServiceGenerator::ctor");
+        //console.log(this);
+    }
+    
+    Generate(module, serviceName)
+    {
+        console.log(`Creating Service: ${serviceName} on module ${module}`);
+        
+        return new Service(this.UnityProject, module, serviceName);
+    }
+}
+
+class Service
+{
+    constructor(unityProject, module, serviceName)
+    {
+        this.UnityProject = unityProject;
+        this.Module = module;
+        this.Name = serviceName;
+        
+        console.log("Service::ctor");
+        console.log("\tModule=" + this.Module.Name);
+        console.log("\tName=" + this.Name);
+    }
+}
 
 
-main();
 
+/*
 async function main() {
     const data =
         {
@@ -176,3 +215,4 @@ async function CreateEditModeTempDir(data) {
     await templateUtils.templateFiles(data.tempDirs.editMode, data.regexs, data.values);
     await templateUtils.renameFiles(data.tempDirs.editMode, data.regexs, data.values);
 }
+*/

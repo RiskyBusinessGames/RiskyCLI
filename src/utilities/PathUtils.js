@@ -71,12 +71,12 @@ function GetFiles(filePath)
 
 function IsDir(filePath)
 {
-    return fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory();
+    return fs.lstatSync(filePath).isDirectory();
 }
 
 function IsFile(filePath)
 {
-    return path.isFile(filePath);
+    return fs.lstatSync(filePath).isFile();
 }
 
 function Resolve(filePath)

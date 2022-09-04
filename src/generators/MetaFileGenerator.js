@@ -1,10 +1,73 @@
 import fs from "fs"
 import * as crypto from "crypto"
 import * as path from "path"
-import pathUtils from "../utilities/pathUtils.js"
+import pathUtils from "../utilities/PathUtils.js"
+import { GeneratorBase } from "../baseClasses/GeneratorBase.js"
+import {TemplatedFile} from "../templating/TemplatedFile.js";
+import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
 
 const __dirname = pathUtils.GetPackageRoot();
 
+export 
+{
+    MetaFileGenerator,
+    MetaFile
+}
+
+const Templates = new TemplateCollection(TemplatePaths.Meta);
+
+
+
+class MetaFileGenerator extends GeneratorBase
+{
+    constructor(unityProject)
+    {
+        super(unityProject);
+        
+        console.log("MetaFileGenerator::ctor");
+    }
+    
+    Generate(filePath)
+    {
+        return new MetaFile(filePath);
+    }
+
+    GenerateRecursive(filePath)
+    {
+        let metaFiles = [];
+        
+        pathUtils.GlobSync(`${dirPath}/**/*`).forEach((filePath) => {
+            metaFiles += new MetaFile(filePath);
+        });
+    }
+}
+
+
+class MetaFile 
+{
+    constructor(filePath)
+    {        
+        if(pathUtils.IsDir(filePath))
+        {
+            this.Template = Templates.FileTemplates[1];
+        }
+        if(pathUtils.IsFile(filePath))
+        {
+            if(filePath.includes(".asmdef"))
+            {
+                this.Template = Templates.FileTemplates[0];
+            }
+            else
+            {
+                this.Template = Templates.FileTemplates[2];
+            }
+            
+        }
+        
+        console.log("MetaFile::ctor");
+        console.log(JSON.stringify(this));
+    }
+}
 
 const VALUES = process.argv.slice(2);
 console.log(VALUES);

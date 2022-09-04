@@ -1,7 +1,7 @@
 import * as path from 'path'
 import fs from 'fs'
-import fileUtils from '/utilities/fileUtils.js'
-import pathUtils from '/utilities/pathUtils.js'
+import fileUtils from './fileUtils.js'
+import pathUtils from './pathUtils.js'
 
 export default {
     ReplaceInAll,

@@ -4,17 +4,16 @@
   "description": "",
   "main": "index.js",
   "author": "",
-  "type":"module",
+  "type": "module",
   "dependencies": {
+    "command-line-args": "^5.2.1",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
     "renamer": "^4.0.0",
     "replace-in-files": "^3.0.0",
     "shelljs": "^0.8.5"
   },
-  "bin":{
-    "mkass": "./AssemblyGenerator/mkass.js",
-    "mkmeta": "./MetaFileGenerator/mkmeta.js",
-    "mkservice": "./ServiceGenerator/mkservice.js"
+  "bin": {
+    "risky": "./risky-cli.js"
   }
 }

@@ -1,7 +1,11 @@
 ﻿//import * as fse from 'fs-extra'
 //import fileUtils from 'utilities/fileUtils.js'
-import pathUtils from '../utilities/pathUtils.js'
-import mkmeta from '../generators/mkmeta.js'
+import pathUtils from './utilities/pathUtils.js'
+import {ModuleGenerator} from './generators/ModuleGenerator.js'
+import {MetaFileGenerator} from './generators/MetaFileGenerator.js'
+import {ServiceGenerator} from './generators/ServiceGenerator.js'
+import {ComponentGenerator} from "./generators/ComponentGenerator.js";
+
 //import * as shell from 'shelljs'
 
 export {
@@ -10,6 +14,8 @@ export {
 
 class UnityProject 
 {
+    Modules={}
+    
     constructor() {
         this.WorkingDir = "./";
 
@@ -19,6 +25,12 @@ class UnityProject
             throw new Error("Error while finding project root");
         }
 
+        this.ProjectName = pathUtils.Resolve(root).split("/")[-1];
+        
+        console.log(this.ProjectName);
+        
+        return;
+        
         let projectRoot = pathUtils.GetRelative(this.WorkingDir, root.filePath);
 
         this.UnityPaths =
@@ -43,6 +55,11 @@ class UnityProject
 
         this.ResourcePaths = FindResourcesPaths(this.UnityPaths.Assets);
 
+        this.ModuleGenerator = new ModuleGenerator(this);
+        this.ServiceGenerator = new ServiceGenerator(this);
+        this.ComponentGenerator = new ComponentGenerator(this);
+        this.MetaFileGenerator = new MetaFileGenerator(this);
+
     }
 
     CreateProjectDirs()
@@ -58,7 +75,7 @@ class UnityProject
             {
                 console.log("\tCreating Dir: " + filePath);
                 pathUtils.CreateDir(filePath);
-                mkmeta.CreateMetaFile(filePath);
+                MetaFileGenerator.CreateMetaFile(filePath);
             }
             else
             {
@@ -69,22 +86,43 @@ class UnityProject
     
     CreateModule(moduleName)
     {
-        console.log("Creating Module: " + moduleName);
+        this.Modules[moduleName] = this.ModuleGenerator.Generate(moduleName);
     }
 
     CreateComponent(moduleName, componentName)
     {
-        console.log(`Creating Component: ${componentName} on module ${moduleName}`);
+        let module = this.Modules[moduleName];
+
+        if(module === undefined)
+        {
+            throw new Error(`Module ${moduleName} does not exist in this project!`);
+        }
+        
+        module.AddComponent(this.ComponentGenerator.Generate(componentName));
+        
     }
 
     CreateService(moduleName, serviceName)
     {
-        console.log(`Creating Service: ${serviceName} on module ${moduleName}`);
+        let module = this.Modules[moduleName];
+
+        if(module === undefined)
+        {
+            throw new Error(`Module ${moduleName} does not exist in this project!`);
+        }
+
+        module.AddService(this.ServiceGenerator.Generate(module, serviceName));
+    }
+    
+    CreateMetaFile(filePath)
+    {
+        this.MetaFileGenerator.Generate(filePath);
     }
 
     LogInfo()
     {
-        console.log(this);
+        console.log(this.ProjectPaths);
+        console.log(this.Modules);
     }
 }
 
@@ -144,7 +182,7 @@ function FindResourcesPaths(projectRoot)
 }
 
 let project = new UnityProject();
-project.CreateProjectDirs();
-project.CreateModule("TestModule");
-project.CreateService("TestModule", "TestService");
-project.CreateComponent("TestModule", "TestComponent");
+project.CreateMetaFile("./Assets");
+//project.CreateMetaFile("./Assets/Source/TestUtilities/RiskyTools.Tests.TestUtilities.asmdef");
+//project.CreateMetaFile("./Assets/Source/TestUtilities/TestReflectionUtility.cs");
+

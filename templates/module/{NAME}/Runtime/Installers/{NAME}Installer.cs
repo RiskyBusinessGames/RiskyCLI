@@ -1,4 +1,4 @@
-﻿using Zenject;
+﻿﻿using Zenject;
 using {PREFIX}.{NAME}.Services;
 using {PREFIX}.{NAME}.Interfaces;
 
