@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/projectSettingsUpdater.xml
+/.idea.TestProject.iml
+/contentModel.xml
+# Datasource local storage ignored files
+/../../../../../../../../../../../:\Users\Matt\git_repos\RiskyBusiness\RiskyFiles\test\TestProject\.idea\.idea.TestProject\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
