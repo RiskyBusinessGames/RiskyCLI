@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const utilities=require("../utilities");
-const fse = require('fs-extra');
-const shell = require("shelljs");
-const mkmeta = require("../MetaFileGenerator/mkmeta");
+import templateUtils from "/utilities/templateUtils"
+import mkmeta from "/MetaFileGenerator/mkmeta"
+
+import * as fse from "fs-extra"
 
 main();
 
@@ -13,7 +13,7 @@ async function main()
     {
         args:SetupArgs(),
         templateDir:`${__dirname}/{NAME}`,
-        tempDir: utilities.createTempDir(),
+        tempDir: templateUtils.createTempDir(),
         regexs:{
             prefix: /{PREFIX}/g,
             name: /{NAME}/g
@@ -47,12 +47,9 @@ async function CreateDir(data) {
     console.log('\x1b[33m%s\x1b[0m',"Copying templates...")
     fse.copySync(`${data.templateDir}`, `${data.tempDir}/{NAME}`);
 
-    console.log('\x1b[33m%s\x1b[0m',"Templating Files...")
-    await utilities.templateFiles(data.tempDir, data.regexs, data.values);
+    console.log('\x1b[33m%s\x1b[0m',"Templating & Renaming Files...")
+    await templateUtils.ReplaceInAll(data.tempDir, data.regexs, data.values);
     
-    console.log('\x1b[33m%s\x1b[0m',"Renaming Files...")
-    await utilities.renameFiles(data.tempDir, data.regexs, data.values);
-
     console.log('\x1b[33m%s\x1b[0m',"Generating Meta Files...")
     mkmeta.CreateMetaFilesRecursive(`${data.tempDir}/${data.values.name}`);
     

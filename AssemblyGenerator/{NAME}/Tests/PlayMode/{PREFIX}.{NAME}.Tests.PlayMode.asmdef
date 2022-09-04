@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Zenject",
         "Zenject-TestFramework",
-        "{PREFIX}.{NAME}"
+        "{PREFIX}.{NAME}",
+        "RiskyTools.Tests.TestUtilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

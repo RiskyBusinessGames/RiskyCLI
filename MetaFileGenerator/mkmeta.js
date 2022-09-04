@@ -1,43 +1,37 @@
-#!/usr/bin/env node
-const fse = require('fs-extra');
-const path = require('path');
-const crypto = require("crypto");
-const glob = require('glob');
-const { stat } = require('fs');
+import fs from "fs"
+import * as crypto from "crypto"
+import * as path from "path"
+import pathUtils from "/utilities/pathUtils.js"
+
 
 const VALUES = process.argv.slice(2);
 console.log(VALUES);
 const templateStrings = LoadTemplates();
 
-module.exports=
-{
-    CreateMetaFile:CreateMetaFile,
-    CreateMetaFilesRecursive: function(dirPath)
-    {
-        var globstring =`${dirPath}/**/*`.replace(/\\/g,"/");
-        console.log(globstring);
-
-        glob.sync(globstring).forEach((filePath) => {
-            CreateMetaFile(filePath);
-        });
-    }
+export default {
+    CreateMetaFile,
+    CreateMetaFilesRecursive
 }
 
+function CreateMetaFilesRecursive(dirPath) {
+    pathUtils.GlobSync(`${dirPath}/**/*`).forEach((filePath) => {
+        CreateMetaFile(filePath);
+    });
+}
 
-function CreateMetaFile(filePath)
-{
+function CreateMetaFile(filePath) {
     console.log(`creating meta file for ${filePath}`);
-    const stats = fse.lstatSync(filePath);
+    const stats = fs.lstatSync(filePath);
 
     if (stats.isDirectory()) {
-        var metaFilePath = `${filePath}.meta`;
+        let metaFilePath = `${filePath}.meta`;
         // directories can have a trailing slash on the path, so we want to remove this so we create
         // a meta file with the name of the dir, not a .meta file _in_ the dir.
-        if (filePath.slice(-1) == "/") {
+        if (filePath.slice(-1) === "/") {
             metaFilePath = `${filePath.slice(0, -1)}.meta`;
         }
 
-        if (fse.existsSync(metaFilePath)) {
+        if (fs.existsSync(metaFilePath)) {
             throw new Error("metafile already exists for this item!");
         }
 
@@ -48,14 +42,13 @@ function CreateMetaFile(filePath)
         const ext = path.extname(filePath);
         const metaFilePath = `${filePath}.meta`;
 
-        if (fse.existsSync(metaFilePath)) {
+        if (fs.existsSync(metaFilePath)) {
             throw new Error("metafile already exists for this item!");
         }
 
-        if (ext == ".asmdef") {
+        if (ext === ".asmdef") {
             MakeAsmdefMetaFile(metaFilePath);
-        }
-        else {
+        } else {
             MakeFileMetaFile(metaFilePath, stats);
         }
     }
@@ -64,56 +57,54 @@ function CreateMetaFile(filePath)
 
 function LoadTemplates() {
     const templatePaths = {
-        ASMDEF: `${__dirname}/Templates/{ASMDEF}.meta`,
-        DIR: `${__dirname}/Templates/{DIR}.meta`,
-        FILE: `${__dirname}/Templates/{FILE}.meta`
+        asmdef: `${__dirname}/Templates/{ASMDEF}.meta`,
+        dir: `${__dirname}/Templates/{DIR}.meta`,
+        file: `${__dirname}/Templates/{FILE}.meta`
     };
 
-    var templateStrings = {};
+    let templateStrings = {};
 
     Object.keys(templatePaths).forEach(key => {
-        const string = fse.readFileSync(templatePaths[key], "Utf8");
-        templateStrings[key] = string;
+        templateStrings[key] = fs.readFileSync(templatePaths[key], {encoding: 'Utf8'});
     });
 
     return templateStrings;
 }
 
 function MakeDirMetaFile(filePath) {
-    const template = templateStrings["DIR"];
+    const template = templateStrings.dir;
 
     const fileText = FileTextFromTemplate(template);
 
-    fse.writeFileSync(filePath, fileText);
+    fs.writeFileSync(filePath, fileText);
 }
 
 function MakeFileMetaFile(filePath, stats) {
 
     const createTime = Math.floor(stats.birthtimeMs / 1000);
 
-    const template = templateStrings["FILE"];
+    const template = templateStrings.file;
     const fileText = FileTextFromTemplate(template, createTime);
 
-    fse.writeFileSync(filePath, fileText);
+    fs.writeFileSync(filePath, fileText);
 }
 
 function MakeAsmdefMetaFile(filePath) {
-    const template = templateStrings["ASMDEF"];
+    const template = templateStrings.asmdef;
 
     const fileText = FileTextFromTemplate(template);
 
-    fse.writeFileSync(filePath, fileText);
+    fs.writeFileSync(filePath, fileText);
 }
 
 function MakeGuid() {
-    var hexstring = crypto.randomBytes(16).toString("hex"); // 16 bytes generates a 32 character hex string
-    return hexstring;
+     // 16 bytes generates a 32 character hex string
+    return crypto.randomBytes(16).toString("hex");
 }
 
 function FileTextFromTemplate(template, createTime) {
     const guid = MakeGuid();
 
-    var fileText = template.replace("{GUID}", guid)
+    return template.replace("{GUID}", guid)
         .replace("{UNIXTIME}", createTime);
-    return fileText;
 }

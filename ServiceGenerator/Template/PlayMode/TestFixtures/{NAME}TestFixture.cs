@@ -1,3 +1,5 @@
+using System;
+using UnityEngine;
 using NUnit.Framework;
 using {NAMESPACE}.Services;
 using {NAMESPACE}.Interfaces;
