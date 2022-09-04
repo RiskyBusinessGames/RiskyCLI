@@ -54,7 +54,7 @@ class UnityProject
         this.ResourcePaths = FindResourcesPaths(this.UnityPaths.Assets);
 
         this.ModuleGenerator = new ModuleGenerator(this);
-        //this.ServiceGenerator = new ServiceGenerator(this);
+        this.ServiceGenerator = new ServiceGenerator(this);
         //this.ComponentGenerator = new ComponentGenerator(this);
         this.MetaFileGenerator = new MetaFileGenerator(this);
 

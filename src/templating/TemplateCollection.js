@@ -34,12 +34,6 @@ class TemplateCollection
 			let relativePath = pathUtils.GetRelative(templatePath, globResult[i]);
 			let absolutePath = pathUtils.Resolve(globResult[i]);
 			let outputPath = pathUtils.Resolve(pathUtils.Join(destinationRoot, relativePath));
-
-			console.log("!!!!!!!!!!!!!!!")
-			console.log(relativePath);
-			console.log(absolutePath);
-			console.log(outputPath);
-			console.log("!!!!!!!!!!!!!!!")
 			
 			if (pathUtils.IsFile(absolutePath))
 			{
@@ -63,6 +57,12 @@ class TemplateCollection
 		
 		this.DirectoryTemplates.forEach(template =>
 		{
+			if(pathUtils.Exists(template.DestinationPath))
+			{
+				console.log("Skipping Already Existing Output: " + template.DestinationPath);
+				return;
+			}
+			
 			template.GenerateOutput(regexs, values);
 			unityProject.CreateMetaFile(template.DestinationPath);
 		});
@@ -70,6 +70,12 @@ class TemplateCollection
 		
 		this.FileTemplates.forEach(template =>
 		{
+			if(pathUtils.Exists(template.DestinationPath))
+			{
+				console.log("Skipping Already Existing Output: " + template.DestinationPath);
+				return;
+			}
+
 			template.GenerateOutput(regexs, values);
 			unityProject.CreateMetaFile(template.DestinationPath);
 		});

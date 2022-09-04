@@ -4,4 +4,8 @@ import {UnityProject} from "./src/UnityProject.js";
 
 const project = new UnityProject();
 
-project.CreateModule("HelloWorldModule");
+const moduleName = "HelloWorldModule";
+const serviceName= "GreetingService";
+
+project.CreateModule(moduleName);
+project.CreateService(moduleName, serviceName);

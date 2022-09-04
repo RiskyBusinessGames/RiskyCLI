@@ -31,7 +31,6 @@ class Module
     Services={}
     Components={}
     
-    
     constructor(unityProject, moduleName)
     {
         if(unityProject === undefined || moduleName === undefined)
@@ -41,6 +40,7 @@ class Module
         
         this.UnityProject = unityProject;
         this.Name = moduleName;
+        this.ModulePath = `${this.UnityProject.ProjectPaths.Modules}/${this.Name}`;
 
         console.log("Module::ctor");
         console.log("\tModule=" + this.Name);
@@ -62,9 +62,6 @@ class Module
         ];
         
         this.TempalateCollection.GenerateOutput(unityProject, regexs, values);
-        
-        console.log("Module::ctor");
-        console.log("\tName=" + this.Name);
     }
 
     AddComponent(component)

@@ -10,7 +10,7 @@ function WriteFile(filePath, fileContents)
 {
     try {
         writeFileSync(filePath, fileContents);
-        console.log(`File Write:\n\t${filePath}\n\t${fileContents}`);
+        //console.log(`File Write:\n\t${filePath}\n\t${fileContents}`);
     } 
     catch (ex)
     {

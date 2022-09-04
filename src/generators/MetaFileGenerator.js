@@ -8,8 +8,6 @@ const __dirname = pathUtils.GetPackageRoot();
 
 const Templates = new TemplateCollection(TemplatePaths.Meta, TemplatePaths.Meta);
 
-
-
 class MetaFileGenerator extends GeneratorBase
 {
     constructor(unityProject)
