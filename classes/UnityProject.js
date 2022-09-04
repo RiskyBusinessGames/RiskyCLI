@@ -1,6 +1,7 @@
 ﻿//import * as fse from 'fs-extra'
 //import fileUtils from 'utilities/fileUtils.js'
 import pathUtils from '../utilities/pathUtils.js'
+import mkmeta from '../generators/mkmeta.js'
 //import * as shell from 'shelljs'
 
 export {
@@ -46,6 +47,8 @@ class UnityProject
 
     CreateProjectDirs()
     {
+        console.log("Creating Project Dirs");
+        
         let keys = Object.keys(this.ProjectPaths);
         
         for(let i = 0; i < keys.length; i++)
@@ -53,7 +56,13 @@ class UnityProject
             let filePath = this.ProjectPaths[keys[i]];
             if(!pathUtils.Exists(filePath))
             {
+                console.log("\tCreating Dir: " + filePath);
                 pathUtils.CreateDir(filePath);
+                mkmeta.CreateMetaFile(filePath);
+            }
+            else
+            {
+                console.log("\tSkipping Existing Dir: " + filePath);
             }
         }
     }
@@ -135,4 +144,7 @@ function FindResourcesPaths(projectRoot)
 }
 
 let project = new UnityProject();
-project.LogInfo();
+project.CreateProjectDirs();
+project.CreateModule("TestModule");
+project.CreateService("TestModule", "TestService");
+project.CreateComponent("TestModule", "TestComponent");

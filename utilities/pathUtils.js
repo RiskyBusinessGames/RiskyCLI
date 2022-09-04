@@ -4,6 +4,7 @@ import * as fs from 'fs'
 
 export default
 {
+    GetPackageRoot,
     Join,
     GlobSync,
     GetDirs,
@@ -15,6 +16,25 @@ export default
     GetRelative,
     Exists,
     CreateDir
+}
+
+function GetPackageRoot()
+{
+    let filePath = ".";
+    
+    let counter = 0;
+    while(counter !== 10)
+    {
+        let packagePath = `${filePath}/package.json`
+        if(Exists(packagePath))
+        {
+            return Resolve(filePath);
+        }
+        
+        filePath = `../${filePath}`;
+
+        counter++;
+    }
 }
 
 function Join()

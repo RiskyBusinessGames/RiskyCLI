@@ -1,7 +1,9 @@
 import fs from "fs"
 import * as crypto from "crypto"
 import * as path from "path"
-import pathUtils from "/utilities/pathUtils.js"
+import pathUtils from "../utilities/pathUtils.js"
+
+const __dirname = pathUtils.GetPackageRoot();
 
 
 const VALUES = process.argv.slice(2);
@@ -57,9 +59,9 @@ function CreateMetaFile(filePath) {
 
 function LoadTemplates() {
     const templatePaths = {
-        asmdef: `${__dirname}/Templates/{ASMDEF}.meta`,
-        dir: `${__dirname}/Templates/{DIR}.meta`,
-        file: `${__dirname}/Templates/{FILE}.meta`
+        asmdef: `${__dirname}/templates/meta/{ASMDEF}.meta`,
+        dir: `${__dirname}/templates/meta/{DIR}.meta`,
+        file: `${__dirname}/templates/meta/{FILE}.meta`
     };
 
     let templateStrings = {};
