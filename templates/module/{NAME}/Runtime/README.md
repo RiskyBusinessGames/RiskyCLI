@@ -5,6 +5,9 @@ The `{PREFIX}.{NAME}` assembly provides the following functioanlity ...
 
 TODO! 
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ### Getting Started
 TODO! 
 
