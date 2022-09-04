@@ -55,7 +55,7 @@ class UnityProject
 
         this.ModuleGenerator = new ModuleGenerator(this);
         this.ServiceGenerator = new ServiceGenerator(this);
-        //this.ComponentGenerator = new ComponentGenerator(this);
+        this.ComponentGenerator = new ComponentGenerator(this);
         this.MetaFileGenerator = new MetaFileGenerator(this);
 
     }
@@ -96,7 +96,7 @@ class UnityProject
             throw new Error(`Module ${moduleName} does not exist in this project!`);
         }
         
-        module.AddComponent(this.ComponentGenerator.Generate(componentName));
+        module.AddComponent(this.ComponentGenerator.Generate(module, componentName));
         
     }
 

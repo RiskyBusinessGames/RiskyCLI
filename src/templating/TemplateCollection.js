@@ -7,7 +7,7 @@ const __dirname = pathUtils.GetPackageRoot();
 const TemplatePaths = {
 	Module: `${__dirname}/templates/module/`,
 	Service: `${__dirname}/templates/service/`,
-	Component: `${__dirname}/templates/module/`,
+	Component: `${__dirname}/templates/component/`,
 	Meta: `${__dirname}/templates/meta/`
 }
 
@@ -18,11 +18,14 @@ class TemplateCollection
 
 	constructor(templatePath, destinationRoot)
 	{
+		console.log("TemplateCollection::ctor");
+		console.log(templatePath);
+		console.log(destinationRoot);
+		
 		this.LoadTemplates(templatePath, destinationRoot);
-
-		// console.log("TemplateCollection::ctor");
-		// console.log(this.FileTemplates);
-		// console.log(this.DirectoryTemplates);
+	
+		console.log(this.FileTemplates);
+		console.log(this.DirectoryTemplates);
 	}
 
 	LoadTemplates(templatePath, destinationRoot)
@@ -57,12 +60,6 @@ class TemplateCollection
 		
 		this.DirectoryTemplates.forEach(template =>
 		{
-			if(pathUtils.Exists(template.DestinationPath))
-			{
-				console.log("Skipping Already Existing Output: " + template.DestinationPath);
-				return;
-			}
-			
 			template.GenerateOutput(regexs, values);
 			unityProject.CreateMetaFile(template.DestinationPath);
 		});

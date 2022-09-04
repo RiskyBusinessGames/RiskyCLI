@@ -1,4 +1,5 @@
 ﻿import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
+import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
 
 export
 {
@@ -30,8 +31,27 @@ class Component
 		this.UnityProject = unityProject;
 		this.Module = module;
 		this.Name = componentName;
-
+		
 		console.log("Component::ctor");
-		console.log(this);
+		console.log("\tModule=" + this.Module.Name);
+		console.log("\tName=" + this.Name);
+		console.log("\tProject=" + this.UnityProject.Name);
+
+
+		this.TempalateCollection = new TemplateCollection(
+			TemplatePaths.Component,
+			this.Module.ModulePath);
+
+		let regexs = [
+			/{NAMESPACE}/g,
+			/{NAME}/g
+		];
+
+		let values = [
+			`${this.UnityProject.Name}.${this.Module.Name}`,
+			this.Name
+		];
+
+		this.TempalateCollection.GenerateOutput(unityProject, regexs, values);
 	}
 }

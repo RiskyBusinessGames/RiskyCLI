@@ -6,6 +6,7 @@ const project = new UnityProject();
 
 const moduleName = "HelloWorldModule";
 const serviceName= "GreetingService";
+const componentName= "Potato";
 
 project.CreateModule(moduleName);
-project.CreateService(moduleName, serviceName);
+project.CreateComponent(moduleName, componentName);

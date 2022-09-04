@@ -1,5 +1,6 @@
 ﻿import fs from "fs"
 import FileUtils from "../utilities/FileUtils.js";
+import pathUtils from "../utilities/PathUtils.js";
 
 export class TemplatedFile
 {
@@ -27,13 +28,21 @@ export class TemplatedFile
 		{
 			let regex = regexs[i];
 			let value = values[i];
-			
+
 			this.DestinationPath = this.DestinationPath.replace(regex, value);
 			this.DestinationText = this.DestinationText.replace(regex, value);
 		}
 		
 		//console.log(this.DestinationText);
 		
-		FileUtils.WriteFile(this.DestinationPath, this.DestinationText);
+		if(pathUtils.Exists(this.DestinationPath))
+		{
+			console.log("Skipping Already Existing Output: " + this.DestinationPath);
+		}
+		else
+		{
+			//console.log("Writing Output: " + this.DestinationPath);
+			FileUtils.WriteFile(this.DestinationPath, this.DestinationText);
+		}
 	}
 }

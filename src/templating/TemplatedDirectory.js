@@ -1,4 +1,4 @@
-﻿import PathUtils from "../utilities/PathUtils.js";
+﻿import pathUtils from "../utilities/PathUtils.js";
 
 export class TemplatedDirectory
 {
@@ -21,6 +21,13 @@ export class TemplatedDirectory
 			this.DestinationPath = this.DestinationPath.replace(regex, value);
 		}
 
-		PathUtils.CreateDir(this.DestinationPath);
+
+		if(pathUtils.Exists(this.DestinationPath))
+		{
+			console.log("Skipping Already Existing Output: " + this.DestinationPath);
+			return;
+		}
+
+		pathUtils.CreateDir(this.DestinationPath);
 	}
 }
