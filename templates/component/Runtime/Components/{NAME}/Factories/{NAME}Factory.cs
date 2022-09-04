@@ -1,9 +1,9 @@
 using System;
 using Zenject;
 
-namespace {NAMESPACE}.Components.{NAME}
+namespace {NAMESPACE}
 {
-    /// \ingroup {NAMESPACE}.Components.{NAME}
+    /// \ingroup {NAMESPACE}
     /// 
     /// <summary>
     /// </summary>

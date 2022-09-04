@@ -10,3 +10,4 @@ const componentName= "Potato";
 
 project.CreateModule(moduleName);
 project.CreateComponent(moduleName, componentName);
+project.CreateService(moduleName, serviceName);

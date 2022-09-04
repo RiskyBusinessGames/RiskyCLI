@@ -15,7 +15,7 @@ class ModuleGenerator extends GeneratorBase
     constructor(unityProject)
     {
         super(unityProject);
-        console.log("ModuleGenerator::ctor");
+        //console.log("ModuleGenerator::ctor");
     }
 
     Generate(moduleName)
@@ -41,10 +41,11 @@ class Module
         this.UnityProject = unityProject;
         this.Name = moduleName;
         this.ModulePath = `${this.UnityProject.ProjectPaths.Modules}/${this.Name}`;
+        this.InstallerPath = `${this.ModulePath}/Runtime/Installers/${this.Name}Installer.cs`;
 
-        console.log("Module::ctor");
-        console.log("\tModule=" + this.Name);
-        console.log("\tProject=" + this.UnityProject.Name);
+        //console.log("Module::ctor");
+        //console.log("\tModule=" + this.Name);
+        //console.log("\tProject=" + this.UnityProject.Name);
         
         
         this.TempalateCollection = new TemplateCollection(

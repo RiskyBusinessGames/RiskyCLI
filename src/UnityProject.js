@@ -27,7 +27,7 @@ class UnityProject
 
         this.Name = pathUtils.Resolve(root.filePath).split("/").slice(-1)[0];
         
-        console.log(this.Name);
+        //console.log(this.Name);
         
         let projectRoot = pathUtils.GetRelative(this.WorkingDir, root.filePath);
 
@@ -62,7 +62,7 @@ class UnityProject
 
     CreateProjectDirs()
     {
-        console.log("Creating Project Dirs");
+        //console.log("Creating Project Dirs");
         
         let keys = Object.keys(this.ProjectPaths);
         
@@ -71,13 +71,13 @@ class UnityProject
             let filePath = this.ProjectPaths[keys[i]];
             if(!pathUtils.Exists(filePath))
             {
-                console.log("\tCreating Dir: " + filePath);
+                //console.log("\tCreating Dir: " + filePath);
                 pathUtils.CreateDir(filePath);
                 MetaFileGenerator.CreateMetaFile(filePath);
             }
             else
             {
-                console.log("\tSkipping Existing Dir: " + filePath);
+                //console.log("\tSkipping Existing Dir: " + filePath);
             }
         }
     }
@@ -136,7 +136,7 @@ function FindProjectRoot(filePath)
     let counter = 0;
     while(counter !== 10)
     {
-        console.log(filePath);
+        //console.log(filePath);
         
         if(pathUtils.IsFileSystemRoot(filePath))
         {

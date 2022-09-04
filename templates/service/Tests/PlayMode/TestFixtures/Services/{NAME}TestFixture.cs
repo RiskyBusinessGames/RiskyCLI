@@ -6,7 +6,7 @@ using {NAMESPACE}.Interfaces;
 using {NAMESPACE}.Installers;
 using Zenject;
 
-namespace {NAMESPACE}.Services.Tests
+namespace {NAMESPACE}.Services
 {
     internal abstract class {NAME}TestFixture: ZenjectIntegrationTestFixture
     {

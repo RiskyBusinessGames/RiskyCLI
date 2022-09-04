@@ -1,8 +1,8 @@
 using Zenject;
 
-namespace {NAMESPACE}.Components.{NAME}
+namespace {NAMESPACE}
 {
-    /// \ingroup TestProject.HelloWorldModule.Components.{NAME}
+    /// \ingroup {NAMESPACE}
     /// 
     /// <summary>
     /// </summary>

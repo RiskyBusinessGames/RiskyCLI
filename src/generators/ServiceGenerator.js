@@ -10,6 +10,7 @@ import * as fse from 'fs-extra'
 import * as glob from 'glob'*/
 import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
 import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
+import { AddServiceToInstaller } from "../utilities/InstallerUtils.js";
 
 export
 {
@@ -23,7 +24,7 @@ class ServiceGenerator extends GeneratorBase
     {
         super(unityProject);
 
-        console.log("ServiceGenerator::ctor");
+        //console.log("ServiceGenerator::ctor");
     }
     
     Generate(module, serviceName)
@@ -53,17 +54,21 @@ class Service
             TemplatePaths.Service,
             this.Module.ModulePath);
 
+        this.NameSpace=`${this.UnityProject.Name}.${this.Module.Name}`;
+        
         let regexs = [
             /{NAMESPACE}/g,
             /{NAME}/g
         ];
 
         let values = [
-            `${this.UnityProject.Name}.${this.Module.Name}`,
+            this.NameSpace,
             this.Name
         ];
         
         this.TempalateCollection.GenerateOutput(unityProject, regexs, values);
+        
+        AddServiceToInstaller(this.Module.InstallerPath, this);
     }
 }
 

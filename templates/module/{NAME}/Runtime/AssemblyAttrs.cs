@@ -17,3 +17,8 @@ namespace {PREFIX}.{NAME}.Interfaces
 {
     // Intentionally blank, used for setting up namespace level attributes
 }
+
+namespace {PREFIX}.{NAME}.Components
+{
+    // Intentionally blank, used for setting up namespace level attributes
+}

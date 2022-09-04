@@ -1,5 +1,6 @@
 ﻿import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
 import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
+import { AddComponentToInstaller} from "../utilities/InstallerUtils.js";
 
 export
 {
@@ -14,7 +15,7 @@ class ComponentGenerator extends GeneratorBase
 	constructor(unityProject)
 	{
 		super(unityProject);
-		console.log("ComponentGenerator::ctor");
+		//console.log("ComponentGenerator::ctor");
 		//console.log(this);
 	}
 
@@ -32,26 +33,30 @@ class Component
 		this.Module = module;
 		this.Name = componentName;
 		
-		console.log("Component::ctor");
-		console.log("\tModule=" + this.Module.Name);
-		console.log("\tName=" + this.Name);
-		console.log("\tProject=" + this.UnityProject.Name);
+		// console.log("Component::ctor");
+		// console.log("\tModule=" + this.Module.Name);
+		// console.log("\tName=" + this.Name);
+		// console.log("\tProject=" + this.UnityProject.Name);
 
 
 		this.TempalateCollection = new TemplateCollection(
 			TemplatePaths.Component,
 			this.Module.ModulePath);
 
+		this.NameSpace = `${this.UnityProject.Name}.${this.Module.Name}.Components.${this.Name}`;
+		
 		let regexs = [
 			/{NAMESPACE}/g,
 			/{NAME}/g
 		];
 
 		let values = [
-			`${this.UnityProject.Name}.${this.Module.Name}`,
+			this.NameSpace,
 			this.Name
 		];
 
 		this.TempalateCollection.GenerateOutput(unityProject, regexs, values);
+
+		AddComponentToInstaller(this.Module.InstallerPath, this);
 	}
 }

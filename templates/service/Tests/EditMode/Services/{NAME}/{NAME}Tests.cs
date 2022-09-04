@@ -8,7 +8,7 @@ using {NAMESPACE}.Services;
 using {NAMESPACE}.Interfaces;
 using {NAMESPACE}.Installers;
 
-namespace {NAMESPACE}.Services.Tests
+namespace {NAMESPACE}.Services
 {
     internal class {NAME}Tests
     {

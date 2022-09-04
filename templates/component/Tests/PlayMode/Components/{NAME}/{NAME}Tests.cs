@@ -1,8 +1,7 @@
 using System;
 using NUnit.Framework;
-using {NAMESPACE}.Components.{NAME};
 
-namespace {NAMESPACE}.Components.Tests
+namespace {NAMESPACE}
 {
     internal class {NAME}Tests: {NAME}TestFixture
     {

@@ -4,9 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-using {NAMESPACE}.Components.{NAME};
-
-namespace {NAMESPACE}.Components.Tests
+namespace {NAMESPACE}
 {
     internal class {NAME}Tests
     {

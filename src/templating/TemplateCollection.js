@@ -18,14 +18,14 @@ class TemplateCollection
 
 	constructor(templatePath, destinationRoot)
 	{
-		console.log("TemplateCollection::ctor");
-		console.log(templatePath);
-		console.log(destinationRoot);
+		// console.log("TemplateCollection::ctor");
+		// console.log(templatePath);
+		// console.log(destinationRoot);
 		
 		this.LoadTemplates(templatePath, destinationRoot);
 	
-		console.log(this.FileTemplates);
-		console.log(this.DirectoryTemplates);
+		//console.log(this.FileTemplates);
+		//console.log(this.DirectoryTemplates);
 	}
 
 	LoadTemplates(templatePath, destinationRoot)
@@ -40,13 +40,13 @@ class TemplateCollection
 			
 			if (pathUtils.IsFile(absolutePath))
 			{
-				console.log("Path is File: "+absolutePath);
+				//console.log("Path is File: "+absolutePath);
 				this.FileTemplates.push(new TemplatedFile(absolutePath, outputPath));
 			}
 
 			if (pathUtils.IsDir(absolutePath))
 			{
-				console.log("Path is Directory: "+absolutePath);
+				//console.log("Path is Directory: "+absolutePath);
 				this.DirectoryTemplates.push(new TemplatedDirectory(absolutePath, outputPath));
 			}
 		}
@@ -54,9 +54,9 @@ class TemplateCollection
 
 	GenerateOutput(unityProject, regexs, values)
 	{
-		console.log("TemplateCollection::GenerateOutput");
-		console.log(regexs);
-		console.log(values);
+		//console.log("TemplateCollection::GenerateOutput");
+		//console.log(regexs);
+		//console.log(values);
 		
 		this.DirectoryTemplates.forEach(template =>
 		{
@@ -69,7 +69,7 @@ class TemplateCollection
 		{
 			if(pathUtils.Exists(template.DestinationPath))
 			{
-				console.log("Skipping Already Existing Output: " + template.DestinationPath);
+				//console.log("Skipping Already Existing Output: " + template.DestinationPath);
 				return;
 			}
 

@@ -1,26 +1,38 @@
-import * as fse from "fs-extra"
-import { writeFileSync } from 'fs'
+import { writeFileSync, readFileSync, rmSync, createWriteStream } from 'fs'
 export default {
     GetFileLines,
     WriteFileLines,
-    WriteFile
+    WriteFile,
+    ReadFile
 }
 
 function WriteFile(filePath, fileContents)
 {
     try {
-        writeFileSync(filePath, fileContents);
+        writeFileSync(filePath, fileContents, "utf8");
         //console.log(`File Write:\n\t${filePath}\n\t${fileContents}`);
-    } 
+    }
     catch (ex)
     {
-       throw ex;
+        throw ex;
+    }
+}
+
+function ReadFile(filePath)
+{
+    try {
+        return readFileSync(filePath, "utf8");
+        //console.log(`File Write:\n\t${filePath}\n\t${fileContents}`);
+    }
+    catch (ex)
+    {
+        throw ex;
     }
 }
 
 function GetFileLines(filePath)
 {
-    let file = fse.readFileSync(filePath, 'utf-8');
+    let file = readFileSync(filePath, "utf8");
     let lines = file.split(/\r?\n/);
 
     console.log(`READING FILE: ${filePath}`);
@@ -34,13 +46,13 @@ function WriteFileLines(filePath, lines)
     console.log(`WRITING FILE: ${filePath}`);
     console.log(`WRITING FILE: ${lines.length}`);
 
-    fse.rmSync(filePath);
+    //rmSync(filePath);
 
-    let writer = fse.createWriteStream(filePath);
+    let writer = createWriteStream(filePath);
 
     for(let i = 0; i < lines.length; i++)
     {
-        console.log(lines[i]);
+        //console.log(lines[i]);
         writer.write(lines[i]);
         writer.write("\n");
     }

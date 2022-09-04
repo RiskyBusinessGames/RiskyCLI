@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
 using NUnit.Framework;
-using {NAMESPACE}.Components.{NAME};
 using Zenject;
 
-namespace {NAMESPACE}.Components.Tests
+namespace {NAMESPACE}
 {
     internal abstract class {NAME}TestFixture: ZenjectIntegrationTestFixture
     {
