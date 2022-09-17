@@ -1,5 +1,6 @@
-import { writeFileSync, readFileSync, rmSync, createWriteStream } from 'fs'
-export default {
+const { writeFileSync, readFileSync, rmSync, createWriteStream } = require('fs');
+
+module.exports= {
     GetFileLines,
     WriteFileLines,
     WriteFile,

@@ -1,8 +1,10 @@
-﻿import fs from "fs"
-import FileUtils from "../utilities/FileUtils.js";
-import pathUtils from "../utilities/PathUtils.js";
+﻿const fs = require( "fs");
+const FileUtils = require( "../utilities/FileUtils.js");
+const pathUtils = require("../utilities/PathUtils.js");
 
-export class TemplatedFile
+
+
+module.exports.TemplatedFile=class TemplatedFile
 {
 	constructor(templatePath, destinationPath)
 	{

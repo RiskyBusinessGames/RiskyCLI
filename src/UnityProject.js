@@ -1,18 +1,10 @@
-﻿//import * as fse from 'fs-extra'
-//import fileUtils from 'utilities/fileUtils.js'
-import pathUtils from './utilities/pathUtils.js'
-import {ModuleGenerator} from './generators/ModuleGenerator.js'
-import {MetaFileGenerator} from './generators/MetaFileGenerator.js'
-import {ServiceGenerator} from './generators/ServiceGenerator.js'
-import {ComponentGenerator} from "./generators/ComponentGenerator.js";
+﻿const pathUtils = require('./utilities/pathUtils.js');
+const {ModuleGenerator} = require( './generators/ModuleGenerator.js');
+const {MetaFileGenerator} = require( './generators/MetaFileGenerator.js');
+const {ServiceGenerator} = require( './generators/ServiceGenerator.js');
+const {ComponentGenerator} = require( "./generators/ComponentGenerator.js");
 
-//import * as shell from 'shelljs'
-
-export {
-    UnityProject
-}
-
-class UnityProject 
+module.exports.UnityProject=class UnityProject 
 {
     Modules={}
     
@@ -27,7 +19,7 @@ class UnityProject
 
         this.Name = pathUtils.Resolve(root.filePath).split("/").slice(-1)[0];
         
-        //console.log(this.Name);
+        console.log(this.Name);
         
         let projectRoot = pathUtils.GetRelative(this.WorkingDir, root.filePath);
 
@@ -57,12 +49,13 @@ class UnityProject
         this.ServiceGenerator = new ServiceGenerator(this);
         this.ComponentGenerator = new ComponentGenerator(this);
         this.MetaFileGenerator = new MetaFileGenerator(this);
-
+        
+        this.CreateProjectDirs();
     }
 
     CreateProjectDirs()
     {
-        //console.log("Creating Project Dirs");
+        console.log("Creating Project Dirs");
         
         let keys = Object.keys(this.ProjectPaths);
         
@@ -71,13 +64,13 @@ class UnityProject
             let filePath = this.ProjectPaths[keys[i]];
             if(!pathUtils.Exists(filePath))
             {
-                //console.log("\tCreating Dir: " + filePath);
+                console.log("\tCreating Dir: " + filePath);
                 pathUtils.CreateDir(filePath);
-                MetaFileGenerator.CreateMetaFile(filePath);
+                this.CreateMetaFile(filePath);
             }
             else
             {
-                //console.log("\tSkipping Existing Dir: " + filePath);
+                console.log("\tSkipping Existing Dir: " + filePath);
             }
         }
     }

@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "author": "",
-  "type": "module",
   "dependencies": {
     "command-line-args": "^5.2.1",
     "fs-extra": "^10.1.0",

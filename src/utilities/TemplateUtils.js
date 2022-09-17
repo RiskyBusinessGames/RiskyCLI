@@ -1,9 +1,10 @@
-import * as path from 'path'
-import fs from 'fs'
-import fileUtils from './fileUtils.js'
-import pathUtils from './pathUtils.js'
+const path = require('path');
+const fs = require( 'fs');
+const fileUtils = require( './fileUtils.js');
+const pathUtils = require( './pathUtils.js');
 
-export default {
+module.exports= 
+{
     ReplaceInAll,
     TemplateFiles,
     RenameFiles,

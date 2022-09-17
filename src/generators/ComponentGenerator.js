@@ -1,12 +1,8 @@
-﻿import {GeneratorBase} from "../baseClasses/GeneratorBase.js";
-import {TemplateCollection, TemplatePaths} from "../templating/TemplateCollection.js";
-import { AddComponentToInstaller} from "../utilities/InstallerUtils.js";
+﻿
+const {GeneratorBase} = require("../baseClasses/GeneratorBase.js");
+const {TemplateCollection, TemplatePaths} = require("../templating/TemplateCollection.js");
+const { AddComponentToInstaller}  = require( "../utilities/InstallerUtils.js");
 
-export
-{
-	ComponentGenerator,
-	Component
-}
 
 class ComponentGenerator extends GeneratorBase
 {
@@ -60,3 +56,6 @@ class Component
 		AddComponentToInstaller(this.Module.InstallerPath, this);
 	}
 }
+
+module.exports.Component = Component;
+module.exports.ComponentGenerator = ComponentGenerator;

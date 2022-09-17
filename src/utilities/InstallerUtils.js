@@ -1,5 +1,5 @@
-import fileUtils from "./fileUtils.js"
-import PathUtils from "./PathUtils.js";
+const fileUtils = require("./fileUtils.js");
+const PathUtils = require( "./PathUtils.js");
 
 const regexs =
 {
@@ -22,7 +22,7 @@ const tags =
     components: "// <RiskyCLI.Components>"
 }
 
-export
+module.exports=
 {
     AddServiceToInstaller,
     AddComponentToInstaller

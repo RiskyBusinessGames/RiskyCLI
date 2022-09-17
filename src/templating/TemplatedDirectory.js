@@ -1,6 +1,7 @@
-﻿import pathUtils from "../utilities/PathUtils.js";
+﻿const pathUtils = require("../utilities/PathUtils.js");
 
-export class TemplatedDirectory
+
+module.exports.TemplatedDirectory=class TemplatedDirectory
 {
 	constructor(templatePath, destinationPath)
 	{

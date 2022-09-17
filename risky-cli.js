@@ -1,9 +1,13 @@
-﻿#!/usr/bin/env node
-
-import {UnityProject} from "./src/UnityProject.js";
+﻿const {UnityProject} =require("./src/UnityProject.js");
 
 const project = new UnityProject();
 
+
+project.CreateModule("Logging");
+project.CreateComponent("Logging", "ColorCodedUnitySink");
+
+
+/*
 project.CreateModule("Plugins");
 
 project.CreateModule("Core");
@@ -108,3 +112,4 @@ project.CreateComponent("UI", "LayeredCanvasComponent");
 project.CreateModule("Build");
 project.CreateService("Build", "UnityPlayerBuildService");
 project.CreateService("Build", "UMod2BuildService");
+*/

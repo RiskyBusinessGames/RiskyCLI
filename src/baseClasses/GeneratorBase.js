@@ -1,12 +1,5 @@
-﻿import {inspect} from "util";
-
-
-export
-{
-	GeneratorBase
-}
-
-class GeneratorBase
+﻿
+module.exports.GeneratorBase = class
 {
 	Templates=[];
 	

@@ -1,31 +1,33 @@
-﻿import pathUtils from "../utilities/PathUtils.js";
-import {TemplatedFile} from "./TemplatedFile.js";
-import {TemplatedDirectory} from "./TemplatedDirectory.js";
+﻿const pathUtils = require("../utilities/PathUtils.js");
+const {TemplatedFile} = require("./TemplatedFile.js");
+const {TemplatedDirectory} = require("./TemplatedDirectory.js");
 
-const __dirname = pathUtils.GetPackageRoot();
-
-const TemplatePaths = {
-	Module: `${__dirname}/templates/module/`,
-	Service: `${__dirname}/templates/service/`,
-	Component: `${__dirname}/templates/component/`,
-	Meta: `${__dirname}/templates/meta/`
+const TemplatePaths= {
+	Module: pathUtils.Join(__dirname, "../../templates/module/"),
+	Service: pathUtils.Join(__dirname, "../../templates/service/"),
+	Component: pathUtils.Join(__dirname, "../../templates/component/"),
+	Meta: pathUtils.Join(__dirname, "../../templates/meta/")
 }
 
-class TemplateCollection
+module.exports.TemplatePaths = TemplatePaths;
+
+module.exports.TemplateCollection = class
 {
 	FileTemplates = [];
 	DirectoryTemplates = [];
 
 	constructor(templatePath, destinationRoot)
 	{
-		// console.log("TemplateCollection::ctor");
-		// console.log(templatePath);
-		// console.log(destinationRoot);
+		
+		console.log("TemplateCollection::ctor");
+		console.log("templatePath " + templatePath);
+		console.log("destinationRoot " + destinationRoot);
+		console.log("TemplatePaths " + TemplatePaths)
 		
 		this.LoadTemplates(templatePath, destinationRoot);
 	
-		//console.log(this.FileTemplates);
-		//console.log(this.DirectoryTemplates);
+		console.log(this.FileTemplates);
+		console.log(this.DirectoryTemplates);
 	}
 
 	LoadTemplates(templatePath, destinationRoot)
@@ -40,13 +42,13 @@ class TemplateCollection
 			
 			if (pathUtils.IsFile(absolutePath))
 			{
-				//console.log("Path is File: "+absolutePath);
+				console.log("Path is File: "+absolutePath);
 				this.FileTemplates.push(new TemplatedFile(absolutePath, outputPath));
 			}
 
 			if (pathUtils.IsDir(absolutePath))
 			{
-				//console.log("Path is Directory: "+absolutePath);
+				console.log("Path is Directory: "+absolutePath);
 				this.DirectoryTemplates.push(new TemplatedDirectory(absolutePath, outputPath));
 			}
 		}
@@ -54,9 +56,9 @@ class TemplateCollection
 
 	GenerateOutput(unityProject, regexs, values)
 	{
-		//console.log("TemplateCollection::GenerateOutput");
-		//console.log(regexs);
-		//console.log(values);
+		console.log("TemplateCollection::GenerateOutput");
+		console.log(regexs);
+		console.log(values);
 		
 		this.DirectoryTemplates.forEach(template =>
 		{
@@ -69,7 +71,7 @@ class TemplateCollection
 		{
 			if(pathUtils.Exists(template.DestinationPath))
 			{
-				//console.log("Skipping Already Existing Output: " + template.DestinationPath);
+				console.log("Skipping Already Existing Output: " + template.DestinationPath);
 				return;
 			}
 
@@ -77,10 +79,4 @@ class TemplateCollection
 			unityProject.CreateMetaFile(template.DestinationPath);
 		});
 	}
-}
-
-export
-{
-	TemplatePaths,
-	TemplateCollection
 }

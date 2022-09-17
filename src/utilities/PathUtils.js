@@ -1,10 +1,9 @@
-﻿import * as path from "path"
-import glob from "glob"
-import * as fs from 'fs'
+﻿const glob = require("glob");
+const fs = require("fs");
+const path = require("path");
 
-export default
+module.exports=
 {
-    GetPackageRoot,
     Join,
     GlobSync,
     GetDirs,
@@ -16,25 +15,6 @@ export default
     GetRelative,
     Exists,
     CreateDir
-}
-
-function GetPackageRoot()
-{
-    let filePath = ".";
-    
-    let counter = 0;
-    while(counter !== 10)
-    {
-        let packagePath = `${filePath}/package.json`
-        if(Exists(packagePath))
-        {
-            return Resolve(filePath);
-        }
-        
-        filePath = `../${filePath}`;
-
-        counter++;
-    }
 }
 
 function Join()
