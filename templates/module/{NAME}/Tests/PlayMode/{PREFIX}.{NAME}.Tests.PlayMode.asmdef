@@ -16,7 +16,6 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "Moq.dll",
-        "NSubstitute.dll",
         "Castle.Core.dll",
         "Newtonsoft.Json.dll"
     ],
