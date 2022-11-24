@@ -1,5 +1,5 @@
 {
-    "name": "{PREFIX}.{NAME}",
+    "name": "{PREFIX}.{NAME}.Runtime",
     "rootNamespace": "{PREFIX}.{NAME}",
     "references": [
         "Zenject"

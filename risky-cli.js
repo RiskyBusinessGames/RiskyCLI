@@ -1,13 +1,73 @@
-﻿const {UnityProject} =require("./src/UnityProject.js");
+﻿console.log("RiskyCLI");
 
-const project = new UnityProject();
+const {UnityProject} = require("./src/UnityProject.js");
+
+let projectConfig=
+{
+    name: "NFTGames",
+    projectPaths: {
+        Content: "{projectRoot}/Assets/Content",
+        Scenes:  "{projectRoot}/Assets/Scenes",
+        Source:  "{projectRoot}/Assets/NFTGames",
+        Modules: "{projectRoot}/Assets/NFTGames/Common"
+    }
+}
+
+let project = new UnityProject(projectConfig);
+
+//const moduleName="Database";
+
+//project.CreateModule(moduleName);
+
+project.CreateModule("Services");
+project.CreateService("Services", "SessionService");
+project.CreateService("Services", "ScoreService");
+
+project.CreateModule("Messaging");
+
+project.CreateModule("UI");
+project.CreateComponent("UI", "CoinsScoreUI");
+project.CreateComponent("UI", "DistanceScoreUI");
+project.CreateComponent("UI", "AvatarSelectUI");
+project.CreateComponent("UI", "GameStartScreenUI");
+project.CreateComponent("UI", "GameOverScreenUI");
+
+project.CreateModule("Components");
+project.CreateComponent("Components", "Coin");
+project.CreateComponent("Components", "Player");
+project.CreateComponent("Components", "Level");
+project.CreateComponent("Components", "Obstacle");
+project.CreateComponent("Components", "EventZone");
+
+project.CreateModule("Input");
+project.CreateService("Input", "MouseInputService");
+project.CreateService("Input", "TouchInputService");
+project.CreateService("Input", "KeyboardInputService");
+
+project.CreateModule("NFTAPI");
+project.CreateModule("Ads");
 
 
-project.CreateModule("Logging");
-project.CreateComponent("Logging", "ColorCodedUnitySink");
+projectConfig=
+    {
+        name: "NFTGames",
+        projectPaths: {
+            Content: "{projectRoot}/Assets/Content",
+            Scenes:  "{projectRoot}/Assets/Scenes",
+            Source:  "{projectRoot}/Assets/NFTGames/MiniGames",
+            Modules: "{projectRoot}/Assets/NFTGames/MiniGames"
+        }
+    }
 
+project = new UnityProject(projectConfig);
+
+project.CreateModule("EndlessRunner");
+project.CreateModule("DoodleJump");
+project.CreateModule("MiniMatch");
+project.CreateModule("FlappyBird");
 
 /*
+
 project.CreateModule("Plugins");
 
 project.CreateModule("Core");

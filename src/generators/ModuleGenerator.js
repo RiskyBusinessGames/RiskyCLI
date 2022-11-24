@@ -33,7 +33,7 @@ module.exports.Module = class
         this.UnityProject = unityProject;
         this.Name = moduleName;
         this.ModulePath = `${this.UnityProject.ProjectPaths.Modules}/${this.Name}`;
-        this.InstallerPath = `${this.ModulePath}/Runtime/Installers/${this.Name}Installer.cs`;
+        this.InstallerPath = `${this.ModulePath}/Runtime/Source/Installers/${this.Name}Installer.cs`;
 
         console.log("Module::ctor");
         console.log("\tModule=" + this.Name);
